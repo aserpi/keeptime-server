@@ -46,3 +46,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Authentication
 gem 'devise_token_auth'
+
+# Serialization
+gem 'active_model_serializers', ">= 0.10.0"
