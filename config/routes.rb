@@ -5,7 +5,7 @@ Rails.application.routes.draw do
           sessions:  'api/v1/devise_token_auth_overrides/sessions',
           token_validations:  'api/v1/devise_token_auth_overrides/token_validations'
       }
-      resources :registered_users
+      resources :registered_users, only: :show
       # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
     end
   end
