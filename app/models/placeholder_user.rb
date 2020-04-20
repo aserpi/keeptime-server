@@ -8,8 +8,4 @@ class PlaceholderUser < User
   def no_same_username_in_workspace
     workspace.supervisor.username != username && workspace.registered_users.exists?( username: username)
   end
-
-  def self.abstract_class?
-    false
-  end
 end
