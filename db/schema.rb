@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_13_110909) do
+ActiveRecord::Schema.define(version: 2020_04_20_103008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(version: 2020_04_13_110909) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "email"
+    t.bigint "workspace_id", null: false
+    t.string "username"
+    t.index ["workspace_id"], name: "index_placeholder_users_on_workspace_id"
   end
 
   create_table "registered_users", force: :cascade do |t|
@@ -37,4 +40,15 @@ ActiveRecord::Schema.define(version: 2020_04_13_110909) do
     t.index ["username"], name: "index_registered_users_on_username", unique: true
   end
 
+  create_table "workspaces", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.bigint "supervisor_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["supervisor_id"], name: "index_workspaces_on_supervisor_id"
+  end
+
+  add_foreign_key "placeholder_users", "workspaces"
+  add_foreign_key "workspaces", "registered_users", column: "supervisor_id"
 end
