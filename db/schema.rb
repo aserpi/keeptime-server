@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_20_103008) do
+ActiveRecord::Schema.define(version: 2020_04_20_165230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,13 @@ ActiveRecord::Schema.define(version: 2020_04_20_103008) do
     t.index ["email"], name: "index_registered_users_on_email", unique: true
     t.index ["uid", "provider"], name: "index_registered_users_on_uid_and_provider", unique: true
     t.index ["username"], name: "index_registered_users_on_username", unique: true
+  end
+
+  create_table "registered_users_workspaces", id: false, force: :cascade do |t|
+    t.bigint "registered_user_id", null: false
+    t.bigint "workspace_id", null: false
+    t.index ["registered_user_id", "workspace_id"], name: "join_registered_user_workspace"
+    t.index ["workspace_id", "registered_user_id"], name: "join_workspace_registered_user"
   end
 
   create_table "workspaces", force: :cascade do |t|
