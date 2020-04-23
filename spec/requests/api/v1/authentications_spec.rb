@@ -66,8 +66,7 @@ module Api
         expect_auth_headers_to(be_truthy)
 
         serializer = RegisteredUserSerializer.new(@current_user)
-        adapter = ActiveModelSerializers::Adapter.create(serializer)
-        expect(response.body).to eq(adapter.to_json)
+        expect(response.body).to eq(serializer.to_json)
       end
 
       def generate_token

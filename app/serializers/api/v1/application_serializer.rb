@@ -1,7 +1,7 @@
-module Api
-  module V1
-    class ApplicationSerializer < ActiveModel::Serializer
-      include Rails.application.routes.url_helpers
-    end
+class Api::V1::ApplicationSerializer
+  include FastJsonapi::ObjectSerializer
+
+  class << self
+    delegate :url_helpers, to: :'Rails.application.routes'
   end
 end

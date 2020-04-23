@@ -9,7 +9,7 @@ module Api
         end
 
         def render_create_success
-          render json: @resource, serializer: Api::V1::RegisteredUserSerializer
+          render json: Api::V1::RegisteredUserSerializer.new(@resource).serializable_hash
         end
 
         def render_create_error_not_confirmed
@@ -21,7 +21,7 @@ module Api
         end
 
         def render_destroy_success
-          head :ok
+          head :no_content
         end
 
         def render_destroy_error
