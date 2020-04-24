@@ -53,3 +53,4 @@ gem 'pundit'
 
 # Serialization
 gem 'fast_jsonapi', '~> 1.6.0', git: 'https://github.com/fast-jsonapi/fast_jsonapi'
+gem 'pagy'
