@@ -211,6 +211,7 @@ DEPENDENCIES
   devise_token_auth
   factory_bot_rails
   fast_jsonapi (~> 1.6.0)!
+  jsonapi-rspec
   listen (>= 3.0.5, < 3.2)
   nokogiri (>= 1.11.0.rc2)
   pg (>= 0.18, < 2.0)
