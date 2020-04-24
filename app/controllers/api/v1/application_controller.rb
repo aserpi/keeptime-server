@@ -8,6 +8,9 @@ module Api
       include Pagy::Backend
       include Pundit
 
+      # Prevents information leakage
+      # Users must not know if a record exists or not, if they have no access to it
+      rescue_from ActiveRecord::RecordNotFound, with: :forbidden
       rescue_from Pundit::NotAuthorizedError, with: :forbidden
 
       protected
@@ -28,11 +31,11 @@ module Api
 
       def forbidden
         head :forbidden
-    end
+      end
 
       def pundit_user
         current_api_v1_registered_user
+      end
     end
   end
-end
 end
