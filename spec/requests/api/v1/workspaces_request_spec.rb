@@ -84,24 +84,61 @@ module Api
           post api_v1_workspaces_path, headers: auth_headers, params: params
           expect(response).to have_http_status(:forbidden)
         end
+
+        it "does not create a workspace with a relationship" do
+          params = workspace_params
+          params[:data][:relationships] = { supervisor: :test }
+
+          post api_v1_workspaces_path, headers: auth_headers, params: params
+          expect(response).to have_http_status(:forbidden)
+          expect(document["errors"][0]["code"]).to eq("forbidden_relationship")
+        end
+
+        it "does not create a workspace with a wrong resource type" do
+          params = workspace_params
+          params[:data][:type] = :test
+
+          post api_v1_workspaces_path, headers: auth_headers, params: params
+          expect(response).to have_http_status(:conflict)
+          expect(document["errors"][0]["code"]).to eq("wrong_type")
+        end
       end
 
       describe "update" do
         it "correctly updates a workspace" do
           workspace = FactoryBot.create(:workspace)
-          new_name = "updatedName"
+          params = update_params workspace
 
-          params = { data: { attributes: { name: new_name } } }
-          workspace.name = new_name
+          workspace.name = params[:data][:attributes][:name]
           patch api_v1_workspace_path(workspace), headers: auth_headers, params: params
 
           expect(response).to have_http_status(:ok)
           expect_workspace(document["data"], workspace)
         end
 
+        it "does not update a workspace if the id is wrong" do
+          workspace = FactoryBot.create(:workspace)
+          params = update_params workspace
+          params[:data][:id] = "wrong_id"
+
+          patch api_v1_workspace_path(workspace), headers: auth_headers, params: params
+          expect(response).to have_http_status(:conflict)
+          expect(document["errors"][0]["code"]).to eq("wrong_id")
+        end
+
+        it "does not update a workspace if the resource type is wrong" do
+          workspace = FactoryBot.create(:workspace)
+          params = update_params workspace
+          params[:data][:type] = :wrong_type
+
+          patch api_v1_workspace_path(workspace), headers: auth_headers, params: params
+          expect(response).to have_http_status(:conflict)
+          expect(document["errors"][0]["code"]).to eq("wrong_type")
+        end
+
         it "does not update a workspace if the user is not the supervisor" do
           workspace = FactoryBot.create :second_workspace
-          params = { data: { attributes: { name: "UpdatedName" } } }
+          params = update_params workspace
 
           patch api_v1_workspace_path(workspace), headers: auth_headers, params: params
           expect(response).to have_http_status(:forbidden)
@@ -147,10 +184,14 @@ module Api
             have_link(:self).with_value(relationships_registered_users_api_v1_workspace_path workspace).and(
                 have_link(:related).with_value(registered_users_api_v1_workspace_path workspace)))
         expect(data["relationships"]["supervisor"]).to(
-            have_link(:self).with_value(api_v1_registered_user_path workspace.supervisor.id))
+            have_link(:related).with_value(api_v1_registered_user_path workspace.supervisor.id))
         expect(data["relationships"]["supervisor"]["data"]).to(
             have_type("registered_users").and(
                 have_id(workspace.supervisor.id.to_s)))
+      end
+
+      def update_params(workspace)
+        { data: { attributes: { name: "updatedName" }, id: workspace.id.to_s, type: :workspaces } }
       end
     end
   end
