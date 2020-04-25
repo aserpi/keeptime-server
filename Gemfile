@@ -47,8 +47,9 @@ gem 'wdm', '>= 0.1.0' if Gem.win_platform?
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-# Authentication
+# Authentication & authorization
 gem 'devise_token_auth'
+gem 'pundit'
 
 # Serialization
 gem 'fast_jsonapi', '~> 1.6.0', git: 'https://github.com/fast-jsonapi/fast_jsonapi'

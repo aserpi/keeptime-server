@@ -1,7 +1,7 @@
 module Api
   module V1
     class WorkspacesController < Api::V1::ApplicationController
-      before_action :authenticate_api_v1_registered_user!
+      after_action :verify_authorized, if: -> { Rails.env.development? || Rails.env.test? }
 
       def index
       end
