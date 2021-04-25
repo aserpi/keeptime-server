@@ -1,0 +1,12 @@
+coverage:
+  range: "75..95"
+  status:
+    patch:
+      default:
+        target: 95
+    project:
+      default:
+        target: 95
+
+ignore:
+  - spec
