@@ -2,20 +2,20 @@ module Api
   module V1
     require 'rails_helper'
 
-    RSpec.describe "Whether access is ocurring properly", type: :request do
+    RSpec.describe "Whether authentication is occurring properly", type: :request do
       before(:each) do
-        @current_user = FactoryBot.create(:registered_user)
+        @current_user = FactoryBot.create(:user)
       end
 
       it "correctly authenticates registered users" do
-        post api_v1_registered_user_session_path,
+        post api_v1_user_session_path,
              params: { email: @current_user.email, password: @current_user.password,
                        headers: { 'content-type' => 'application/json', accept: 'application/json' } }
         expect_current_user
       end
 
       it "does not authenticate users with invalid credentials" do
-        post api_v1_registered_user_session_path,
+        post api_v1_user_session_path,
              params: { email: @current_user.email, password: "invalidPassword",
                        headers: { 'content-type' => 'application/json', accept: 'application/json' } }
         expect_bad_credentials
@@ -65,7 +65,7 @@ module Api
         expect(response).to have_http_status(:ok)
         expect_auth_headers_to(be_truthy)
 
-        serializer = RegisteredUserSerializer.new(@current_user)
+        serializer = UserSerializer.new(@current_user)
         expect(response.body).to eq(serializer.to_json)
       end
 

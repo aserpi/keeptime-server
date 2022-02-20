@@ -7,15 +7,15 @@ class Api::V1::ApplicationPolicy
   end
 
   def index?
-    @user.is_a? RegisteredUser
+    @user.is_a? User
   end
 
   def show?
-    @user.is_a? RegisteredUser
+    @user.is_a? User
   end
 
   def create?
-    @user.is_a? RegisteredUser
+    @user.is_a? User
   end
 
   def new?
@@ -23,7 +23,7 @@ class Api::V1::ApplicationPolicy
   end
 
   def update?
-    @user.is_a? RegisteredUser
+    @user.is_a? User
   end
 
   def edit?

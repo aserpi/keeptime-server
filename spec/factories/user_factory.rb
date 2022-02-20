@@ -1,15 +1,20 @@
 FactoryBot.define do
-  factory :registered_user do
+  factory :user do
     email { "example@example.com" }
     name { "Name Surname" }
     password { "userPassword" }
     username  { "username" }
   end
 
-  factory :second_user, class: RegisteredUser do
+  factory :second_user, class: User do
     email { "second@example.com"}
     name { "Second Name Surname" }
     password { "userPassword" }
     username { "secondUsername" }
+  end
+
+  factory :unregistered_user, class: User do
+    name { "Unregistered User" }
+    username { "unregisteredUser" }
   end
 end

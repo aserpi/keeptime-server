@@ -91,7 +91,7 @@ module Api
 
           post api_v1_workspaces_path, headers: auth_headers, params: params
           expect(response).to have_http_status(:forbidden)
-          expect(document["errors"][0]["code"]).to eq("forbidden_relationship")
+          expect(document["errors"][0]["code"]).to eq("relationship_replacement")
         end
 
         it "does not create a workspace with a wrong resource type" do

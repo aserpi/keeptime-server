@@ -34,7 +34,7 @@ module Api
       end
 
       def pundit_user
-        current_api_v1_registered_user
+        current_api_v1_user
       end
     end
   end

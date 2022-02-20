@@ -25,7 +25,7 @@ module Api
 
           errors = []
           incl_relationships.select { |incl_rel| forbidden_rels.include?(incl_rel) }.each do |incl_rel|
-            errors << { code: :forbidden_relationship,
+            errors << { code: :relationship_replacement,
                         source: "/data/relationships/#{incl_rel}",
                         status: status_s(:forbidden) }
           end
@@ -54,6 +54,36 @@ module Api
           end
 
           true
+        end
+
+        def relation_update_ids(required_type)
+          records = params.require(:data)
+          unless records.is_a? Array
+            render json: { errors: [{ code: :array_required, source: "/data" }] }, status: :bad_request
+            return
+          end
+
+          errors = []
+          ids = []
+          required_type = required_type.to_s
+          records.each_with_index do |record, i|
+            if record[:type] != required_type
+              errors << { code: :wrong_type, source: "/data/#{i}" }
+            else
+              begin
+                ids << Integer(record[:id])
+              rescue ArgumentError
+                errors << { code: :wrong_id, source: "/data/#{i}" }
+              end
+            end
+          end
+
+          unless errors.empty?
+            render json: { errors: errors }, status: :bad_request
+            return ids
+          end
+
+          false
         end
 
         def render_error(resource)

@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :workspace do
     name { "WorkspaceName" }
     description { "Workspace\ndescription" }
-    association :supervisor, factory: :registered_user
-    registered_users { [supervisor] }
+    association :supervisor, factory: :user
+    users { [supervisor] }
   end
 
   factory :second_workspace, class: Workspace do

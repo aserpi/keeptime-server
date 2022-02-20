@@ -5,11 +5,35 @@ class Api::V1::WorkspacePolicy < Api::V1::ApplicationPolicy
   end
 
   def show?
-    @workspace.registered_users.exists?(@user.id)
+    @workspace.users.exists?(@user.id)
   end
 
   def update?
     @workspace.supervisor == @user
+  end
+
+  def index_users?
+    show?
+  end
+
+  def show_supervisor?
+    show?
+  end
+
+  def create_users?
+    update?
+  end
+
+  def update_users?
+    update?
+  end
+
+  def update_supervisor?
+    update?
+  end
+
+  def destroy_users?
+    update?
   end
 
   class Scope
@@ -19,8 +43,8 @@ class Api::V1::WorkspacePolicy < Api::V1::ApplicationPolicy
     end
 
     def resolve
-      @scope.joins('INNER JOIN "registered_users_workspaces" AS "r" ON "workspaces"."id" = "r"."workspace_id"')
-          .where(r: { registered_user_id: @user.id })
+      @scope.joins('INNER JOIN "users_workspaces" AS "r" ON "workspaces"."id" = "r"."workspace_id"')
+          .where(r: { user_id: @user.id })
     end
   end
 end

@@ -5,7 +5,7 @@ module Api
         include Api::V1::Concerns::JsonApi
 
         def render_validate_token_success
-          render json: Api::V1::RegisteredUserSerializer.new(@resource).serializable_hash
+          render json: Api::V1::UserSerializer.new(@resource).serializable_hash
         end
 
         def render_validate_token_error
